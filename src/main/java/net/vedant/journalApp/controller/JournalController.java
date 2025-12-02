@@ -19,20 +19,19 @@ public class JournalController {
     @Autowired
     private JournalService journalService;
 
-    @PostMapping
-    public ResponseEntity<Journal> createJournalEntry(@RequestBody Journal journalEntity) {
+    @PostMapping("/{userName}")
+    public ResponseEntity<Journal> createJournalEntry(@PathVariable String userName, @RequestBody Journal journalEntity) {
         try {
-            journalEntity.setDate(LocalDateTime.now());
-            journalService.createEntry(journalEntity);
+            journalService.createJournal(userName, journalEntity);
             return new ResponseEntity<>(journalEntity, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<Journal>> getAll() {
-        List<Journal> all = journalService.getAll();
+    @GetMapping("/{userName}")
+    public ResponseEntity<List<Journal>> getAllJournalsOfUser(@PathVariable String userName) {
+        List<Journal> all = journalService.JournalsOfUser(userName);
 
         if(all != null && !all.isEmpty()) {
             return ResponseEntity.ok(all);
@@ -50,9 +49,9 @@ public class JournalController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<Journal> deleteJournalById(@PathVariable ObjectId id) {
-        journalService.deleteJournalById(id);
+    @DeleteMapping("/id/{userName}/{id}")
+    public ResponseEntity<Journal> deleteJournalById(@PathVariable String userName, @PathVariable ObjectId id) {
+        journalService.deleteJournalById(userName, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
