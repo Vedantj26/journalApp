@@ -7,12 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
 @Document(collection = "journal_entry")
-public class JournalEntry {
+public class Journal {
 
     @Id
     private ObjectId id;
