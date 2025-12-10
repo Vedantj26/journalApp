@@ -2,15 +2,14 @@ package net.vedant.journalApp.controller;
 
 import net.vedant.journalApp.entity.Journal;
 import net.vedant.journalApp.service.JournalService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/journal")
@@ -33,7 +32,7 @@ public class JournalController {
     public ResponseEntity<List<Journal>> getAllJournalsOfUser(@PathVariable String userName) {
         List<Journal> all = journalService.JournalsOfUser(userName);
 
-        if(all != null && !all.isEmpty()) {
+        if (all != null && !all.isEmpty()) {
             return ResponseEntity.ok(all);
         }
 
@@ -41,7 +40,7 @@ public class JournalController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Journal> getJournalById(@PathVariable ObjectId id) {
+    public ResponseEntity<Journal> getJournalById(@PathVariable UUID id) {
         Optional<Journal> journalById = journalService.getJournalById(id);
         if (journalById.isPresent()) {
             return new ResponseEntity<>(journalById.get(), HttpStatus.OK);
@@ -50,13 +49,13 @@ public class JournalController {
     }
 
     @DeleteMapping("/id/{userName}/{id}")
-    public ResponseEntity<Journal> deleteJournalById(@PathVariable String userName, @PathVariable ObjectId id) {
+    public ResponseEntity<Journal> deleteJournalById(@PathVariable String userName, @PathVariable UUID id) {
         journalService.deleteJournalById(userName, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/id/{id}")
-    public ResponseEntity<Journal> updateJournal(@PathVariable ObjectId id, @RequestBody Journal journal) {
+    public ResponseEntity<Journal> updateJournal(@PathVariable UUID id, @RequestBody Journal journal) {
         Journal journal1 = journalService.updateJournal(id, journal);
         if (journal1 == null) {
             return ResponseEntity.notFound().build();

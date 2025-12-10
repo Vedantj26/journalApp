@@ -21,7 +21,6 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            user.setDate(LocalDateTime.now());
             userService.createEntry(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (Exception e) {
